@@ -5,7 +5,7 @@
 #include <algorithm> // for std::all_of
 #include <optional>
 
-#include "./vendor/werelib.hpp"
+#include "../vendor/werelib.hpp"
 
 using namespace were;
 
