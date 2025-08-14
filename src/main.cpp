@@ -1,36 +1,17 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <cctype> // for std::isdigit
-#include <algorithm> // for std::all_of
-#include <optional>
 
-#include "../vendor/werelib.hpp"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-using namespace were;
-
-std::optional<int> parseFeetInches(const std::string& s) {
-	auto pos = s.find('f');
-	if (pos == std::string::npos) return std::nullopt; // no 'f' found
-	if (pos == 0 || pos == s.size() - 1) return std::nullopt;
-
-	std::string feet_str   = s.substr(0, pos);
-	std::string inches_str = s.substr(pos + 1);
-
-	if (!std::all_of(feet_str.begin(), feet_str.end(),
-		[](byte c){ return std::isdigit(c); }))
-	return std::nullopt;
-
-  if (!std::all_of(inches_str.begin(), inches_str.end(),
-		[](byte c){ return std::isdigit(c); }))
-	return std::nullopt;
-
-	int feet   = std::stoi(feet_str);
-	int inches = std::stoi(inches_str);
-	return feet * 12 + inches;
-}
+#include "./core/lexer.hpp"
+#include "../vendor/wereType.hpp"
 
 int main(int argc, char* argv[]) {
+	LPCWSTR raw = GetCommandLineW();
+	std::wcout << L"Raw Command Line: " << raw << std::endl;
+	
 	std::vector<std::string> args(argv, argv + argc);
 
 	for (const auto& arg : args) {
