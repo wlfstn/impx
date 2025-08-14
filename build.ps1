@@ -19,7 +19,7 @@ function cppRun {
 		Write-Host "Launching!"
 		./build/impx.exe
 	}
-	if ($ProcType -notmatch '[gbr]') {
+	if ($ProcType -notmatch '[gbr1]') {
 		ninja -C build
 		./build/impx.exe
 	}

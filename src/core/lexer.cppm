@@ -1,7 +1,10 @@
-#include "lexer.hpp"
+module;
+
+#include <algorithm>
 #include "../../vendor/wereType.hpp"
 
-std::optional<int> parseFeetInches(const std::string& s) {
+export module lexer;
+export std::optional<int> parseFeetInches(const std::string& s) {
 	auto pos = s.find('f');
 	if (pos == std::string::npos) return std::nullopt; // no 'f' found
 	if (pos == 0 || pos == s.size() - 1) return std::nullopt;
