@@ -14,12 +14,14 @@ export std::optional<int> parseFeetInches(const std::string& s) {
 	std::string inches_str = s.substr(pos + 1);
 
 	if (!std::all_of(feet_str.begin(), feet_str.end(),
-		[](byte c){ return std::isdigit(c); }))
-	return std::nullopt;
+		[](byte c){ return std::isdigit(c); })) {
+			return std::nullopt;
+		}
 
   if (!std::all_of(inches_str.begin(), inches_str.end(),
-		[](byte c){ return std::isdigit(c); }))
-	return std::nullopt;
+		[](byte c){ return std::isdigit(c); })) {
+			return std::nullopt;
+		}
 
 	int feet   = std::stoi(feet_str);
 	int inches = std::stoi(inches_str);
