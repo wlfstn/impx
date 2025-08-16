@@ -1,6 +1,7 @@
 module;
 
 #include <algorithm>
+#include <string>
 #include "../../vendor/wereType.hpp"
 
 export module lexer;
