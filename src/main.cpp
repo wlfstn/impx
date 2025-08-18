@@ -1,3 +1,5 @@
+import lexer;
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -6,13 +8,26 @@
 #include <windows.h>
 
 #include "../vendor/wereType.hpp"
-import lexer;
 
 int main() {
 	
-	LPCWSTR userInput = GetCommandLineW();
-	std::wcout << L"Raw Command Line: " << userInput << std::endl;
+	std::wstring raw_console = GetCommandLineW();
+	std::wcout << L"Raw Command Line: " << raw_console << std::endl;
 
-	std::vector<std::wstring> tokens;
+	size_t sPos = raw_console.find(L'"', 1);
+	if (sPos + 2 < raw_console.size()) {
+		
+		std::wstring userInput = raw_console.substr(sPos + 2);
+		std::wcout << L"Starting Pos:" << sPos << L" | User Input:" << userInput << "\n";
+		// auto tokens = lexer::tokenize(userInput);
+		auto lexVals = lexer::lex(userInput);
+		for (auto val : lexVals) {
+			std::wcout << L"[" << val.lexeme << L" | " << as<u8>(val.type)  << L"] ";
+		}
+
+	} else {
+		std::wcout << L"No input provided" << std::endl;
+	}
+
 
 }
