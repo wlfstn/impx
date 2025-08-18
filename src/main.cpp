@@ -8,17 +8,11 @@
 #include "../vendor/wereType.hpp"
 import lexer;
 
-int main(int argc, char* argv[]) {
-	LPCWSTR raw = GetCommandLineW();
-	std::wcout << L"Raw Command Line: " << raw << std::endl;
+int main() {
+	
+	LPCWSTR userInput = GetCommandLineW();
+	std::wcout << L"Raw Command Line: " << userInput << std::endl;
 
-	std::vector<std::string> args(argv, argv + argc);
+	std::vector<std::wstring> tokens;
 
-	for (const auto& arg : args) {
-		if (auto totalInches = parseFeetInches(arg)) {
-			std::cout << arg << " = " << *totalInches << " inches\n";
-		}
-	}
-
-	u64 inches = 0;
 }

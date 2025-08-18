@@ -1,29 +1,44 @@
 module;
 
-#include <algorithm>
 #include <string>
+#include <vector>
+#include <cwctype>
 #include "../../vendor/wereType.hpp"
 
 export module lexer;
-export std::optional<int> parseFeetInches(const std::string& s) {
-	auto pos = s.find('f');
-	if (pos == std::string::npos) return std::nullopt; // no 'f' found
-	if (pos == 0 || pos == s.size() - 1) return std::nullopt;
 
-	std::string feet_str   = s.substr(0, pos);
-	std::string inches_str = s.substr(pos + 1);
+namespace lexer {
 
-	if (!std::all_of(feet_str.begin(), feet_str.end(),
-		[](byte c){ return std::isdigit(c); })) {
-			return std::nullopt;
+	auto tokenize(const std::wstring& input) -> std::vector<std::wstring> {
+		std::vector<std::wstring> tokens;
+		std::wstring current;
+
+		for (wchar_t c : input) {
+			if (iswspace(c)) {
+				if (!current.empty()) {
+					tokens.push_back(current);
+					current.clear();
+				}
+			} else {
+				current.push_back(c);
+			}
 		}
 
-  if (!std::all_of(inches_str.begin(), inches_str.end(),
-		[](byte c){ return std::isdigit(c); })) {
-			return std::nullopt;
+		if (!current.empty()) {
+			tokens.push_back(current);
 		}
+		return tokens;
+	}
 
-	int feet   = std::stoi(feet_str);
-	int inches = std::stoi(inches_str);
-	return feet * 12 + inches;
+	enum class token_t : u8 {
+		Number,
+		Operator,
+		flag
+	};
+
+	struct token {
+		std::string value;
+		token_t type;
+	};
+
 }
