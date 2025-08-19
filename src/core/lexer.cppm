@@ -1,5 +1,7 @@
 module;
 
+#include <ranges>
+#include <cstddef>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -25,6 +27,7 @@ export namespace lexer {
 	struct token {
 		token_t type;
 		std::wstring lexeme;
+		size_t tokenPos;
 	};
 
 	
@@ -89,11 +92,14 @@ export namespace lexer {
 		return tokens;
 	}
 
-	auto lex(const std::wstring& input) {
+	auto lex(const std::wstring& input) -> std::vector<token> {
 		std::vector<token> result;
-		for (auto& word : tokenize(input)) {
+
+		for (auto&& [vPos, word] : tokenize(input) | std::views::enumerate) {
 			token_t t = classify(word);
-			result.push_back({t, word});
+
+			size_t pos = static_cast<size_t>(vPos);
+			result.push_back({t, word, static_cast<size_t>(pos)});
 		}
 		return result;
 	}
