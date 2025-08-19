@@ -17,16 +17,16 @@ export namespace lexer {
 	// ==================================================
 	// Data Types
 
-	enum class token_t : u8 {
+	enum class lex_t : u8 {
 		ImpValue,
 		Number,
 		Operator,
 		flag
 	};
 
-	struct token {
-		token_t type;
-		std::wstring lexeme;
+	struct lexeme {
+		lex_t type;
+		std::wstring text;
 		size_t tokenPos;
 	};
 
@@ -51,21 +51,21 @@ export namespace lexer {
 		return isNumeric(impVal[0]) && isNumeric(impVal[1]);
 	}
 
-	token_t classify(const std::wstring& str) {
+	lex_t classify(const std::wstring& str) {
 		if (str.size() == 1 && std::wcschr(L"+-*/", str[0])) {
-			return token_t::Operator;
+			return lex_t::Operator;
 		}
 
 		if (str.size() > 1 && str.starts_with(L"-")) {
-			return token_t::flag;
+			return lex_t::flag;
 		}
 
 		if (isImpValue(str)) {
-			return token_t::ImpValue;
+			return lex_t::ImpValue;
 		}
 
 		if (isNumeric(str)) {
-			return token_t::Number;
+			return lex_t::Number;
 		}
 
 		throw std::runtime_error("Unexpected token: " + std::string(str.begin(), str.end()) );
@@ -92,13 +92,13 @@ export namespace lexer {
 		return tokens;
 	}
 
-	auto lex(const std::wstring& input) -> std::vector<token> {
-		std::vector<token> result;
+	auto lex(const std::wstring& input) -> std::vector<lexeme> {
+		std::vector<lexeme> result;
 
-		for (auto&& [vPos, word] : tokenize(input) | std::views::enumerate) {
-			token_t t = classify(word);
+		for (auto&& [i, word] : tokenize(input) | std::views::enumerate) {
+			lex_t t = classify(word);
 
-			size_t pos = static_cast<size_t>(vPos);
+			size_t pos = static_cast<size_t>(i);
 			result.push_back({t, word, static_cast<size_t>(pos)});
 		}
 		return result;

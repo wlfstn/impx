@@ -21,7 +21,7 @@ int main() {
 		// auto tokens = lexer::tokenize(userInput);
 		auto lexVals = lexer::lex(userInput);
 		for (auto val : lexVals) {
-			std::wcout << L"[" << val.lexeme << L" | " << as<u8>(val.type)  << L"] ";
+			std::wcout << L"[" << val.text << L" | " << as<u8>(val.type)  << L"] ";
 		}
 
 	} else {
