@@ -1,5 +1,6 @@
 module;
 
+#include <optional>
 #include <ranges>
 #include <cstddef>
 #include <string>
@@ -15,20 +16,16 @@ export module lexer;
 
 export namespace lexer {
 
-	// ==================================================
 	// Global Member
-
 	u8 toggles{};
 
-	// ==================================================
 	// Data Types
-
 	enum class flag : u8 {
 		only_inches = 1 << 0,
 		version = 1 << 1
 	};
 
-	enum class lex_t : u8 {
+	enum class lexClass : u8 {
 		ImpValue,
 		Number,
 		Operator,
@@ -36,8 +33,9 @@ export namespace lexer {
 	};
 
 	struct lexeme {
-		lex_t type;
+		lexClass type;
 		std::wstring text;
+		std::optional<i64> num;
 		size_t tokenPos;
 	};
 	
@@ -48,7 +46,7 @@ export namespace lexer {
 		return !str.empty() && std::all_of(str.begin(), str.end(), ::iswdigit);
 	}
 
-	bool isImpValue(const std::wstring& str) {
+	std::optional<i64> isImpValue(const std::wstring& str) {
 		auto pos = str.find(L'f');
 		if (pos == std::wstring::npos) return false;
 		if (pos == 0 || pos == str.size() - 1) return false;
@@ -58,12 +56,19 @@ export namespace lexer {
 			str.substr(pos + 1)
 		};
 
-		return isNumeric(impVal[0]) && isNumeric(impVal[1]);
+		if (isNumeric(impVal[0]) && isNumeric(impVal[1])) {
+			int imp_ft = std::stoi(impVal[0]);
+			int imp_in = std::stoi(impVal[1]);
+
+			return imp_ft * 12 + imp_in;
+		}
+
+		return std::nullopt;
 	}
 
-	lex_t classify(const std::wstring& str) {
+	auto classify(const std::wstring& str) -> std::pair<lexClass, std::optional<i64>> {
 		if (str.size() == 1 && std::wcschr(L"+-*/", str[0])) {
-			return lex_t::Operator;
+			return {lexClass::Operator, std::nullopt};
 		}
 
 		if (str.size() > 1 && str.starts_with(L"-")) {
@@ -73,15 +78,15 @@ export namespace lexer {
 			} else if (str == L"-v") {
 				toggles |= as<u8>(flag::version);
 			}
-			return lex_t::flag;
+			return {lexClass::flag, std::nullopt};
 		}
 
-		if (isImpValue(str)) {
-			return lex_t::ImpValue;
+		if (auto val = isImpValue(str)) {
+			return {lexClass::ImpValue, *val};
 		}
 
 		if (isNumeric(str)) {
-			return lex_t::Number;
+			return {lexClass::Number, std::nullopt};
 		}
 
 		throw std::runtime_error("Unexpected token: " + std::string(str.begin(), str.end()) );
@@ -112,10 +117,10 @@ export namespace lexer {
 		std::vector<lexeme> result;
 
 		for (auto&& [i, word] : tokenize(input) | std::views::enumerate) {
-			lex_t t = classify(word);
+			auto [t, val] = classify(word);
 
-			size_t pos = static_cast<size_t>(i);
-			result.push_back({t, word, static_cast<size_t>(pos)});
+			size_t pos = as<size_t>(i);
+			result.push_back({t, word, val, pos});
 		}
 		return result;
 	}
