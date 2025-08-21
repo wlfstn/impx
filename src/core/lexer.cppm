@@ -8,6 +8,7 @@ module;
 #include <cwctype>
 #include <array>
 #include <stdexcept>
+#include <iostream>
 #include "../../vendor/wereType.hpp"
 
 export module lexer;
@@ -15,7 +16,17 @@ export module lexer;
 export namespace lexer {
 
 	// ==================================================
+	// Global Member
+
+	u8 toggles{};
+
+	// ==================================================
 	// Data Types
+
+	enum class flag : u8 {
+		only_inches = 1 << 0,
+		version = 1 << 1
+	};
 
 	enum class lex_t : u8 {
 		ImpValue,
@@ -29,7 +40,6 @@ export namespace lexer {
 		std::wstring text;
 		size_t tokenPos;
 	};
-
 	
 	// ==================================================
 	// Functions
@@ -57,6 +67,12 @@ export namespace lexer {
 		}
 
 		if (str.size() > 1 && str.starts_with(L"-")) {
+			if (str == L"-in") {
+				toggles |= as<u8>(flag::only_inches);
+				std::cout << "inches only enabled\n";
+			} else if (str == L"-v") {
+				toggles |= as<u8>(flag::version);
+			}
 			return lex_t::flag;
 		}
 

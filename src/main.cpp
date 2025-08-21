@@ -28,5 +28,4 @@ int main() {
 		std::wcout << L"No input provided" << std::endl;
 	}
 
-
 }
