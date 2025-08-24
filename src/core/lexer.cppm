@@ -87,14 +87,16 @@ export namespace lexer {
 			}
 			return {lexClass::flag, std::nullopt};
 		}
+		
+		if (isNumeric(str)) {
+			std::wcout << "Numeric Input" << str << "\n";
+			return {lexClass::Number, std::stoi(str)};
+		}
 
 		if (auto val = isImpValue(str)) {
 			return {lexClass::ImpValue, *val};
 		}
 
-		if (isNumeric(str)) {
-			return {lexClass::Number, std::nullopt};
-		}
 
 		throw std::runtime_error("Unexpected token: " + std::string(str.begin(), str.end()) );
 	}

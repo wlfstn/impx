@@ -1,4 +1,5 @@
 import lexer;
+import parser;
 
 #include <iostream>
 #include <string>
@@ -26,6 +27,11 @@ int main() {
 		for (auto val : lexVals) {
 			std::wcout << L"[" << val.text << L" | " << as<u8>(val.type)  << L"] ";
 		}
+		Parser myParser(lexVals);
+		ASTNode* root = myParser.parse();
+
+		std::wcout << L"AST:\n";
+		PrintAST(root);
 
 	} else {
 		std::wcout << L"No input provided" << std::endl;
