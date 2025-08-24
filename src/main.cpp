@@ -18,7 +18,6 @@ int main() {
 		
 		std::wstring userInput = raw_console.substr(sPos + 2);
 		std::wcout << L"Starting Pos:" << sPos << L" | User Input:" << userInput << "\n";
-		// auto tokens = lexer::tokenize(userInput);
 		auto lexVals = lexer::lex(userInput);
 		for (auto val : lexVals) {
 			std::wcout << L"[" << val.text << L" | " << as<u8>(val.type)  << L"] ";

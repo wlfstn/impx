@@ -16,8 +16,9 @@ export module lexer;
 
 export namespace lexer {
 
-	// Global Member
-	u8 toggles{};
+	namespace GBL {
+		u8 toggles{};
+	}
 
 	// Data Types
 	enum class flag : u8 {
@@ -28,7 +29,10 @@ export namespace lexer {
 	enum class lexClass : u8 {
 		ImpValue,
 		Number,
-		Operator,
+		Op_add,
+		Op_subtract,
+		Op_multiply,
+		Op_divide,
 		flag
 	};
 
@@ -68,15 +72,18 @@ export namespace lexer {
 
 	auto classify(const std::wstring& str) -> std::pair<lexClass, std::optional<i64>> {
 		if (str.size() == 1 && std::wcschr(L"+-*/", str[0])) {
-			return {lexClass::Operator, std::nullopt};
+			if (str == L"+") return {lexClass::Op_add, std::nullopt};
+			if (str == L"-") return {lexClass::Op_subtract, std::nullopt};
+			if (str == L"*") return {lexClass::Op_multiply, std::nullopt};
+			if (str == L"/") return {lexClass::Op_divide, std::nullopt};
 		}
 
 		if (str.size() > 1 && str.starts_with(L"-")) {
 			if (str == L"-in") {
-				toggles |= as<u8>(flag::only_inches);
+				GBL::toggles |= as<u8>(flag::only_inches);
 				std::cout << "inches only enabled\n";
 			} else if (str == L"-v") {
-				toggles |= as<u8>(flag::version);
+				GBL::toggles |= as<u8>(flag::version);
 			}
 			return {lexClass::flag, std::nullopt};
 		}
@@ -124,5 +131,4 @@ export namespace lexer {
 		}
 		return result;
 	}
-
 }
