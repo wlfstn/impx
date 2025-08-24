@@ -1,6 +1,9 @@
 # impx
 Imperial CLI calculator
 
+## Todo:
+- Create a Abstract Syntax tree from the lexer information.
+
 ## VSCode users
 - Microsoft C/C++ extention appears to not be able to locate modules
 - Clangd extention might work (75% chance) `llvm-vs-code-extensions.vscode-clangd`

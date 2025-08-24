@@ -13,10 +13,14 @@ int main() {
 	std::wstring raw_console = GetCommandLineW();
 	std::wcout << L"Raw Command Line: " << raw_console << std::endl;
 
-	size_t sPos = raw_console.find(L'"', 1);
-	if (sPos + 2 < raw_console.size()) {
+	size_t sPos = raw_console.find(L' ', 1);
+	if (sPos == std::wstring::npos) {
+		std::wcout << "No input was given!\n";
+		return{};
+	} 
+	if (sPos + 1 < raw_console.size()) {
 		
-		std::wstring userInput = raw_console.substr(sPos + 2);
+		std::wstring userInput = raw_console.substr(sPos + 1);
 		std::wcout << L"Starting Pos:" << sPos << L" | User Input:" << userInput << "\n";
 		auto lexVals = lexer::lex(userInput);
 		for (auto val : lexVals) {

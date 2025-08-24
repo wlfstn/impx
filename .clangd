@@ -1,7 +1,2 @@
-If:
-  PathMatch: build/.*
-Index:
-  Background: Skip
 CompileFlags:
-  Remove: [-fmodule-file=*, -fmodule-map-file=*]
   Add: [-fmodules-cache-path=./.cache/clangd]
