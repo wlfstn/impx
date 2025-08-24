@@ -27,8 +27,16 @@ int main() {
 		for (auto val : lexVals) {
 			std::wcout << L"[" << val.text << L" | " << as<u8>(val.type)  << L"] ";
 		}
+		std::wcout << L"\n";
+
 		Parser myParser(lexVals);
-		ASTNode* root = myParser.parse();
+		ASTNode* root = nullptr;
+		try {
+			ASTNode* root = myParser.parse();
+		} catch (const std::runtime_error& e) {
+			std::cerr << "Parser error: " << e.what() << "\n";
+			return 1;
+		}
 
 		std::wcout << L"AST:\n";
 		PrintAST(root);

@@ -77,7 +77,6 @@ export class Parser {
 			const auto& tok = previous();
 			return new ASTNode{tok.type, tok.num, {}};
 		}
-		std::cerr << "Unexpected Token in parseFactor\n";
 		throw std::runtime_error("Unexpected Token in parseFactor");
 	}
 
