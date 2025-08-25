@@ -32,7 +32,7 @@ int main() {
 		Parser myParser(lexVals);
 		ASTNode* root = nullptr;
 		try {
-			ASTNode* root = myParser.parse();
+			root = myParser.parse();
 		} catch (const std::runtime_error& e) {
 			std::cerr << "Parser error: " << e.what() << "\n";
 			return 1;

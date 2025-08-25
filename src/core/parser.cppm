@@ -35,7 +35,7 @@ export class Parser {
 	auto previous() const -> const lexer::lexeme& { return tokens[current - 1]; }
 
 	bool check(lexer::lexClass expected) const {
-		return !fileEnd() &&  tokens[current].type == expected;
+		return !fileEnd() && tokens[current].type == expected;
 	}
 	bool match(std::initializer_list<lexer::lexClass> kinds) {
 		for (auto k : kinds) {
