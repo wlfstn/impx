@@ -17,6 +17,7 @@ file(GLOB SOURCE_FILES src/*.cpp) # Grab all .cpp files from src folder
 set(MODULE_FILES
 	src/core/lexer.cppm
 	src/core/parser.cppm
+	src/core/calc.cppm
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

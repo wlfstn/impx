@@ -1,8 +1,10 @@
 import lexer;
 import parser;
+import calc;
 
 #include <iostream>
 #include <string>
+#include <expected>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -22,12 +24,8 @@ int main() {
 	if (sPos + 1 < raw_console.size()) {
 		
 		std::wstring userInput = raw_console.substr(sPos + 1);
-		std::wcout << L"Starting Pos:" << sPos << L" | User Input:" << userInput << "\n";
+		std::wcout << L"Starting Pos: " << sPos << L" | User Input: " << userInput << "\n";
 		auto lexVals = lexer::lex(userInput);
-		for (auto val : lexVals) {
-			std::wcout << L"[" << val.text << L" | " << as<u8>(val.type)  << L"] ";
-		}
-		std::wcout << L"\n";
 
 		Parser myParser(lexVals);
 		ASTNode* root = nullptr;
@@ -40,6 +38,13 @@ int main() {
 
 		std::wcout << L"AST:\n";
 		PrintAST(root);
+
+		auto result = calc::EvalAST(root);
+		if (result) {
+			std::wcout << L"Result = " << *result << L"\n";
+		} else {
+			std::wcerr << L"Error: " << result.error() << L"\n";
+		}
 
 	} else {
 		std::wcout << L"No input provided" << std::endl;
