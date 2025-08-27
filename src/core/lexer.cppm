@@ -23,7 +23,8 @@ export namespace lexer {
 	// Data Types
 	enum class flag : u8 {
 		only_inches = 1 << 0,
-		version = 1 << 1
+		version = 1 << 1,
+		debug = 1 << 2
 	};
 
 	enum class lexClass : u8 {
@@ -81,15 +82,19 @@ export namespace lexer {
 		if (str.size() > 1 && str.starts_with(L"-")) {
 			if (str == L"-in") {
 				GBL::toggles |= as<u8>(flag::only_inches);
-				std::cout << "inches only enabled\n";
+				std::cout << "inches flag enabled\n";
 			} else if (str == L"-v") {
 				GBL::toggles |= as<u8>(flag::version);
+				std::cout << "version flag enabled\n";
+			} else  if (str == L"-d") {
+				GBL::toggles |= as<u8>(flag::debug);
+				std::cout << "debug flag enabled\n";
 			}
 			return {lexClass::flag, std::nullopt};
 		}
 		
 		if (isNumeric(str)) {
-			std::wcout << "Numeric Input" << str << "\n";
+			// std::wcout << "Numeric Input " << str << "\n";
 			return {lexClass::Number, std::stoi(str)};
 		}
 

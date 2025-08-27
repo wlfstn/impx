@@ -17,7 +17,7 @@ export namespace calc {
 		switch (node->type) {
 			case lexer::lexClass::Number:
 			case lexer::lexClass::ImpValue:
-					return node->number.value_or(0);
+				return node->number.value_or(0);
 
 			case lexer::lexClass::Op_add: {
 				auto left  = EvalAST(node->children[0]);

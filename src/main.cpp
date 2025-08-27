@@ -14,8 +14,7 @@ import calc;
 int main() {
 	
 	std::wstring raw_console = GetCommandLineW();
-	std::wcout << L"Raw Command Line: " << raw_console << std::endl;
-
+	
 	size_t sPos = raw_console.find(L' ', 1);
 	if (sPos == std::wstring::npos) {
 		std::wcout << "No input was given!\n";
@@ -24,9 +23,8 @@ int main() {
 	if (sPos + 1 < raw_console.size()) {
 		
 		std::wstring userInput = raw_console.substr(sPos + 1);
-		std::wcout << L"Starting Pos: " << sPos << L" | User Input: " << userInput << "\n";
 		auto lexVals = lexer::lex(userInput);
-
+		
 		Parser myParser(lexVals);
 		ASTNode* root = nullptr;
 		try {
@@ -35,9 +33,13 @@ int main() {
 			std::cerr << "Parser error: " << e.what() << "\n";
 			return 1;
 		}
-
-		std::wcout << L"AST:\n";
-		PrintAST(root);
+		
+		if (lexer::GBL::toggles & as<u8>(lexer::flag::debug)) {
+			std::wcout << L"Raw Command Line: " << raw_console << L"\n";
+			std::wcout << L"Starting Pos: " << sPos << L" | User Input: " << userInput << "\n";
+			std::wcout << L"AST:\n";
+			PrintAST(root);
+		}
 
 		auto result = calc::EvalAST(root);
 		if (result) {
