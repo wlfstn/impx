@@ -43,7 +43,11 @@ int main() {
 
 		auto result = calc::EvalAST(root);
 		if (result) {
-			std::wcout << L"Result = " << *result << L"\n";
+			if (lexer::GBL::toggles & as<u8>(lexer::flag::only_inches)) {
+				std::wcout << L"Result = " << *result << L"\n";
+			} else {
+				std::wcout << L"Result = " << calc::ftFormat(*result) << L"\n";
+			}
 		} else {
 			std::wcerr << L"Error: " << result.error() << L"\n";
 		}

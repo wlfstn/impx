@@ -56,4 +56,11 @@ export namespace calc {
 				return std::unexpected(L"Unknown AST node type");
     }
 	}
+	std::wstring ftFormat(int value) {
+		int ft = value / 12;
+		int in = value % 12;
+
+		return std::to_wstring(ft) + L"\'" + std::to_wstring(in) + L"\"";
+	}
+
 }
