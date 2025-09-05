@@ -13,6 +13,7 @@ import calc;
 
 int main() {
 	
+	std::wstring_view version = L"v1.0.0";
 	std::wstring raw_console = GetCommandLineW();
 	
 	size_t sPos = raw_console.find(L' ', 1);
@@ -34,6 +35,9 @@ int main() {
 			return 1;
 		}
 		
+		if (lexer::GBL::toggles & as<u8>(lexer::flag::version)) {
+			std::wcout << version << "\n";
+		}
 		if (lexer::GBL::toggles & as<u8>(lexer::flag::debug)) {
 			std::wcout << L"Raw Command Line: " << raw_console << L"\n";
 			std::wcout << L"Starting Pos: " << sPos << L" | User Input: " << userInput << "\n";
