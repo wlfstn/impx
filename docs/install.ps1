@@ -1,4 +1,4 @@
-$exeDownload = "https://github.com/wlfstn/lsf/releases/download/v1.0.0/impx.exe"
+$exeDownload = "https://github.com/wlfstn/impx/releases/download/v1.0.0/impx.exe"
 $destinationDir = "$env:USERPROFILE\wlfstn\impx"
 $destinationFile = Join-Path $destinationDir "impx.exe"
 
@@ -14,9 +14,9 @@ if (-not $userPath) {
 }
 
 if ($userPath -split ";" -contains $destinationDir) {
-	Write-Host "lsf directory is already in PATH."
+	Write-Host "impx directory is already in PATH."
 } else {
-	$addToPath = Read-Host "Would you like to add lsf to your PATH? (y/n)"
+	$addToPath = Read-Host "Would you like to add impx to your PATH? (y/n)"
 	if ($addToPath -match '^[Yy]$') {
 		$newPath = if ($userPath -eq "") {
 			$destinationDir
