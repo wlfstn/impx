@@ -13,7 +13,7 @@ import calc;
 
 int main() {
 	
-	std::wstring_view version = L"v1.0.0";
+	std::wstring_view version = L"v1.0.1";
 	std::wstring raw_console = GetCommandLineW();
 	
 	size_t sPos = raw_console.find(L' ', 1);

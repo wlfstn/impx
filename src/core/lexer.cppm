@@ -7,7 +7,6 @@ module;
 #include <vector>
 #include <algorithm>
 #include <cwctype>
-#include <array>
 #include <stdexcept>
 #include <iostream>
 #include "../../vendor/wereType.hpp"
@@ -51,19 +50,19 @@ export namespace lexer {
 		return !str.empty() && std::all_of(str.begin(), str.end(), ::iswdigit);
 	}
 
-	std::optional<i64> isImpValue(const std::wstring& str) {
+	auto isImpValue(const std::wstring& str) -> std::optional<i64> {
 		auto pos = str.find(L'f');
 		if (pos == std::wstring::npos) return false;
-		if (pos == 0 || pos == str.size() - 1) return false;
 
-		std::array<std::wstring, 2> impVal {
-			str.substr(0,pos),
-			str.substr(pos + 1)
-		};
+		std::wstring before = str.substr(0,pos);
+		std::wstring after = str.substr(pos + 1);
 
-		if (isNumeric(impVal[0]) && isNumeric(impVal[1])) {
-			int imp_ft = std::stoi(impVal[0]);
-			int imp_in = std::stoi(impVal[1]);
+		if (before.empty()) return std::nullopt;
+		if (after.empty()) after = L"0";
+
+		if (isNumeric(before) && isNumeric(after)) {
+			int imp_ft = std::stoi(before);
+			int imp_in = std::stoi(after);
 
 			return imp_ft * 12 + imp_in;
 		}
@@ -94,7 +93,6 @@ export namespace lexer {
 		}
 		
 		if (isNumeric(str)) {
-			// std::wcout << "Numeric Input " << str << "\n";
 			return {lexClass::Number, std::stoi(str)};
 		}
 
