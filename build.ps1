@@ -3,9 +3,17 @@ function cppRun {
 		[string]$ProcType
 	)
 	Write-Host "Build script!"
+
+	if ($ProcType -eq "--release") {
+		Write-Host "Generating Release Build!"
+		cmake -G Ninja -B ./build -DCMAKE_BUILD_TYPE=Release
+		ninja -C build
+		return
+	}
+	
 	if ($ProcType -match '1') {
 		Write-Host "Generating debug Build with clang Setup!"
-		cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja -B ./build -DCMAKE_CXX_FLAGS_DEBUG="-DDEBUG" 
+		cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja -B ./build -DCMAKE_CXX_FLAGS_DEBUG="-DDEBUG"
 	}
 	if ($ProcType -match 'g') {
 		Write-Host "Generating debug Build!"
