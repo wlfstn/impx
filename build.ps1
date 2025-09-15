@@ -1,3 +1,13 @@
+function stopClangd {
+	if (Get-Process clangd -ErrorAction SilentlyContinue) {
+		Write-Host "Stopping clangd..."
+		taskkill /IM clangd.exe /F 2>$null
+		Start-Sleep -Milliseconds 500 # wait 0.5s for Windows to release mappings
+	} else {
+		Write-Host "clangd not running."
+	}
+}
+
 function cppRun {
 	param (
 		[string]$ProcType
@@ -21,6 +31,7 @@ function cppRun {
 	}
 	if ($ProcType -match 'b') {
 		Write-Host "Building!"
+		# stopClangd # Still doesn't completely stop the issue completely.
 		ninja -C build
 	}
 	if ($ProcType -match 'r') {
