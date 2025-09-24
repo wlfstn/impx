@@ -4,6 +4,8 @@ import calc;
 
 #include <iostream>
 #include <string>
+#include <algorithm>
+#include <cwctype>
 #include <expected>
 
 #define WIN32_LEAN_AND_MEAN
@@ -13,8 +15,14 @@ import calc;
 
 int main() {
 	
-	std::wstring_view version = L"v1.0.1";
+	std::wstring_view version = L"v1.0.2";
 	std::wstring raw_console = GetCommandLineW();
+	std::transform(
+		raw_console.begin(),
+		raw_console.end(),
+		raw_console.begin(),
+		[](wchar_t c) { return std::towlower(c); }
+	);
 	
 	size_t sPos = raw_console.find(L' ', 1);
 	if (sPos == std::wstring::npos) {
