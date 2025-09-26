@@ -15,7 +15,7 @@ import calc;
 
 int main() {
 	
-	std::wstring_view version = L"v1.0.2";
+	std::wstring_view version = L"v1.0.3";
 	std::wstring raw_console = GetCommandLineW();
 	std::transform(
 		raw_console.begin(),

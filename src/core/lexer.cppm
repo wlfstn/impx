@@ -26,6 +26,12 @@ export namespace lexer {
 		debug = 1 << 2
 	};
 
+	constexpr std::pair<std::wstring_view, flag> flags[] = {
+		{L"-in", flag::only_inches},
+		{L"-v", flag::version},
+		{L"-d", flag::debug},
+	};
+
 	enum class lexClass : u8 {
 		ImpValue,
 		Number,
@@ -42,6 +48,7 @@ export namespace lexer {
 		std::optional<i64> num;
 		size_t tokenPos;
 	};
+
 	
 	// ==================================================
 	// Functions
@@ -70,6 +77,13 @@ export namespace lexer {
 		return std::nullopt;
 	}
 
+	constexpr auto lookup_flag(std::wstring_view str) -> std::optional<flag> {
+		for (auto&& [k,v] : flags) {
+			if (str == k) return v;
+		}
+		return std::nullopt;
+	}
+
 	auto classify(const std::wstring& str) -> std::pair<lexClass, std::optional<i64>> {
 		if (str.size() == 1 && std::wcschr(L"+-*/", str[0])) {
 			if (str == L"+") return {lexClass::Op_add, std::nullopt};
@@ -79,15 +93,9 @@ export namespace lexer {
 		}
 
 		if (str.size() > 1 && str.starts_with(L"-")) {
-			if (str == L"-in") {
-				GBL::toggles |= as<u8>(flag::only_inches);
-				std::cout << "inches flag enabled\n";
-			} else if (str == L"-v") {
-				GBL::toggles |= as<u8>(flag::version);
-				std::cout << "version flag enabled\n";
-			} else  if (str == L"-d") {
-				GBL::toggles |= as<u8>(flag::debug);
-				std::cout << "debug flag enabled\n";
+			if (auto f = lookup_flag(str)) {
+				GBL::toggles |= as<u8>(*f);
+				std::wcout << str << L" flag enabled\n";
 			}
 			return {lexClass::flag, std::nullopt};
 		}
@@ -99,7 +107,6 @@ export namespace lexer {
 		if (auto val = isImpValue(str)) {
 			return {lexClass::ImpValue, *val};
 		}
-
 
 		throw std::runtime_error("Unexpected token: " + std::string(str.begin(), str.end()) );
 	}
@@ -130,6 +137,10 @@ export namespace lexer {
 
 		for (auto&& [i, word] : tokenize(input) | std::views::enumerate) {
 			auto [t, val] = classify(word);
+
+			if (t == lexClass::flag) {
+				continue;
+			}
 
 			size_t pos = as<size_t>(i);
 			result.push_back({t, word, val, pos});

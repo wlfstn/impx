@@ -9,9 +9,7 @@ import lexer;
 
 export namespace calc {
 
-	using EvalResult = std::expected<int, std::wstring>;
-
-	EvalResult EvalAST(const ASTNode* node) {
+	auto EvalAST(const ASTNode* node) -> std::expected<int, std::wstring> {
 		if (!node) return std::unexpected(L"Null AST node");
 		
 		switch (node->type) {

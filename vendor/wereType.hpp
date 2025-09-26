@@ -4,8 +4,6 @@
 	
 ////////////////////////////////
 // [DATA ALIASES]
-////////////////////////////////
-
 using byte = unsigned char;
 
 using u8 = unsigned char;
@@ -23,23 +21,22 @@ using f64 = double;
 
 ////////////////////////////////
 // [GENERAL TEMPLATES]
-////////////////////////////////
 
-// [EXAMPLE]			-- were::as<T>(V)
+// [EXAMPLE]			-- as<T>(V)
 // [DESCRIPTION] 	-- static_cast alias at compile time
 template <typename ToType, typename From>
 [[nodiscard]] constexpr ToType as(From&& value) noexcept {
 	return static_cast<ToType>(value);
 }
 
-// [EXAMPLE]			-- were::raw<T>(V)
+// [EXAMPLE]			-- raw<T>(V)
 // [DESCRIPTION]	-- reinterpret_cast alias at compile time
 template <typename ToType, typename From>
 [[nodiscard]] constexpr ToType raw(From&& value) noexcept {
 	return reinterpret_cast<ToType>(value);
 }
 
-// [EXAMPLE]			-- were::asBytes(V); || std::array<were::bytes, n>
+// [EXAMPLE]			-- asBytes(V); || std::array<were::bytes, n>
 // [DESCRIPTION]	-- Convert data into an array of bytes
 template <typename T>
 [[nodiscard]] constexpr auto asBytes(const T& value) noexcept -> std::array<byte, sizeof(T)> {
@@ -51,7 +48,7 @@ template <typename T>
 	return u.output;
 }
 
-// [EXAMPLE]			-- were::bigEndianSwap(V) 
+// [EXAMPLE]			-- bigEndianSwap(V) 
 // [DESCRIPTION]	-- Convert endian order (only on little endian devices)
 template <typename T>
 constexpr T bigEndianSwap(T value) {
