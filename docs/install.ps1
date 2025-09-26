@@ -1,4 +1,4 @@
-$exeDownload = "https://github.com/wlfstn/impx/releases/download/v1.0.2/impx.exe"
+$exeDownload = "https://github.com/wlfstn/impx/releases/download/v1.0.3/impx.exe"
 $destinationDir = "$env:USERPROFILE\wlfstn\impx"
 $destinationFile = Join-Path $destinationDir "impx.exe"
 
