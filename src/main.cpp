@@ -1,22 +1,48 @@
-import lexer;
-import parser;
-import calc;
-
+#include <cstddef>
 #include <iostream>
 #include <string>
 #include <expected>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+import lexer;
+import parser;
+import calc;
 
 #include "../vendor/wereType.hpp"
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
 
-int main() {
-	
+
+std::wstring getCommandLineMacOS(int argc, char** argv)
+{
+	std::string utf8;
+
+	for (int i = 0; i < argc; ++i) {
+		utf8 += argv[i];
+		if (i + 1 < argc) utf8 += " ";
+	}
+
+	// Convert UTF-8 → UTF-16
+	std::wstring w;
+	w.reserve(utf8.size());
+
+	for (u8 c : utf8)
+		w.push_back(as<wchar_t>(c));
+
+	return w;
+}
+
+int main(int argc, char** argv) {
 	std::wstring_view version = L"v1.0.1";
-	std::wstring raw_console = GetCommandLineW();
 	
-	size_t sPos = raw_console.find(L' ', 1);
+	#if defined(_WIN32)
+	std::wstring raw_console = GetCommandLineW();
+	#elif defined(__MACH__)
+	std::wstring raw_console = getCommandLineMacOS(argc, argv);
+	#endif
+	
+	u64 sPos = raw_console.find(L' ', 1);
 	if (sPos == std::wstring::npos) {
 		std::wcout << "No input was given!\n";
 		return{};

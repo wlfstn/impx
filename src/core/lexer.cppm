@@ -1,5 +1,6 @@
 module;
 
+#include <cstddef>
 #include <optional>
 #include <ranges>
 #include <cstddef>
@@ -9,7 +10,9 @@ module;
 #include <cwctype>
 #include <stdexcept>
 #include <iostream>
+
 #include "../../vendor/wereType.hpp"
+#include "stddef.h"
 
 export module lexer;
 
@@ -22,8 +25,8 @@ export namespace lexer {
 	// Data Types
 	enum class flag : u8 {
 		only_inches = 1 << 0,
-		version = 1 << 1,
-		debug = 1 << 2
+		version     = 1 << 1,
+		debug       = 1 << 2
 	};
 
 	enum class lexClass : u8 {
@@ -40,7 +43,7 @@ export namespace lexer {
 		lexClass type;
 		std::wstring text;
 		std::optional<i64> num;
-		size_t tokenPos;
+		u64 tokenPos;
 	};
 	
 	// ==================================================
@@ -125,15 +128,33 @@ export namespace lexer {
 		return tokens;
 	}
 
+	#if defined(_WIN32)
 	auto lex(const std::wstring& input) -> std::vector<lexeme> {
 		std::vector<lexeme> result;
 
 		for (auto&& [i, word] : tokenize(input) | std::views::enumerate) {
 			auto [t, val] = classify(word);
 
-			size_t pos = as<size_t>(i);
+			u64 pos = as<u64>(i);
 			result.push_back({t, word, val, pos});
 		}
 		return result;
 	}
+
+	#else
+	auto lex(const std::wstring& input) -> std::vector<lexeme> {
+		std::vector<lexeme> result;
+
+		auto toks = tokenize(input);
+		u64 i = 0;
+
+		for (auto&& word : toks) {
+			auto [t, val] = classify(word);
+			result.push_back({t, word, val, i});
+			++i;
+		}
+
+		return result;
+	}
+	#endif
 }

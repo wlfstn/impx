@@ -1,5 +1,6 @@
 module;
 
+#include <cstddef>
 #include <vector>
 #include <iostream>
 #include <optional>
@@ -26,7 +27,7 @@ export class Parser {
 
 	private:
 	std::span<const lexer::lexeme> tokens;
-	size_t current = 0;
+	u64 current = 0;
 
 	// utility
 	bool fileEnd() const { return current >= tokens.size(); }
