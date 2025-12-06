@@ -1,6 +1,16 @@
 #include <cstddef>
 #include <iostream>
 #include <string>
+#include <algorithm>
+#include <cwctype>
+#include <expected>
+
+import lexer;
+import parser;
+import calc;
+
+#include <iostream>
+#include <string>
 #include <expected>
 
 import lexer;
@@ -34,13 +44,19 @@ std::wstring getCommandLineMacOS(int argc, char** argv)
 }
 
 int main(int argc, char** argv) {
-	std::wstring_view version = L"v1.0.1";
+	std::wstring_view version = L"v1.0.4";
 	
 	#if defined(_WIN32)
 	std::wstring raw_console = GetCommandLineW();
 	#elif defined(__MACH__)
 	std::wstring raw_console = getCommandLineMacOS(argc, argv);
 	#endif
+	std::transform(
+		raw_console.begin(),
+		raw_console.end(),
+		raw_console.begin(),
+		[](wchar_t c) { return std::towlower(c); }
+	);
 	
 	u64 sPos = raw_console.find(L' ', 1);
 	if (sPos == std::wstring::npos) {
