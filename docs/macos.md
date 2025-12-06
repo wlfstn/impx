@@ -1,4 +1,10 @@
 # Working on MacOS
+- AppleClang is not fully supported by CMake and causes issues with modules.
+- Install LLVM clang with home brew `brew install llvm`
+- Specify the path to LLVM clang 
+	`-DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++` 
+	`-DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang`
+- Mac Terminal Command `export SDKROOT="$(xcrun --show-sdk-path)"`
 
 ## Working in VSCode
 Create user editor files

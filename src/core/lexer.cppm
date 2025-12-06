@@ -35,12 +35,6 @@ export namespace lexer {
 		{L"-d", flag::debug},
 	};
 
-	constexpr std::pair<std::wstring_view, flag> flags[] = {
-		{L"-in", flag::only_inches},
-		{L"-v", flag::version},
-		{L"-d", flag::debug},
-	};
-
 	enum class lexClass : u8 {
 		ImpValue,
 		Number,
