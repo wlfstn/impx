@@ -7,6 +7,7 @@ module;
 export module calc;
 import parser;
 import lexer;
+import weretype;
 
 export namespace calc {
 

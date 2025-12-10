@@ -18,13 +18,15 @@ endif()
 
 set(SOURCE_FILES src/main.cpp) # Grab all .cpp files from src folder
 
-add_library(core_modules)
-target_sources(core_modules
+add_library(impx_modules)
+target_sources(impx_modules
 	PUBLIC
 	FILE_SET cxx_modules TYPE CXX_MODULES FILES
 		src/core/lexer.cppm
 		src/core/parser.cppm
 		src/core/calc.cppm
+		src/util/weretype.cppm
 )
+
 add_executable(impx src/main.cpp)
-target_link_libraries(impx PRIVATE core_modules)
+target_link_libraries(impx PRIVATE impx_modules)

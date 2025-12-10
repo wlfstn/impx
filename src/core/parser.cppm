@@ -7,10 +7,10 @@ module;
 #include <initializer_list>
 #include <span>
 #include <stdexcept>
-#include "../../vendor/wereType.hpp"
 
 export module parser;
 import lexer;
+import weretype;
 
 export struct ASTNode {
 	lexer::lexClass type;

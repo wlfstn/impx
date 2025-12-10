@@ -10,10 +10,10 @@ module;
 #include <stdexcept>
 #include <iostream>
 
-#include "../../vendor/wereType.hpp"
 #include "stddef.h"
 
 export module lexer;
+import weretype;
 
 export namespace lexer {
 
@@ -141,13 +141,7 @@ export namespace lexer {
 		for (auto&& [i, word] : tokenize(input) | std::views::enumerate) {
 			auto [t, val] = classify(word);
 
-			if (t == lexClass::flag) {
-				continue;
-			}
-
-			if (t == lexClass::flag) {
-				continue;
-			}
+			if (t == lexClass::flag) continue;
 
 			u64 pos = as<u64>(i);
 			result.push_back({t, word, val, pos});
