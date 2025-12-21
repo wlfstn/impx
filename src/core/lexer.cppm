@@ -51,10 +51,6 @@ export namespace lexer {
 		u64 tokenPos;
 	};
 
-	
-	// ==================================================
-	// Functions
-
 	bool isNumeric(const std::wstring& str) {
 		return !str.empty() && std::all_of(str.begin(), str.end(), ::iswdigit);
 	}
